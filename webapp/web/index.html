@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>TON Miner</title>
+<link rel="stylesheet" href="/style.css"/>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>⚡ TON Miner</h1>
+  </header>
+
+  <div class="tabs">
+    <button data-tab="energy" class="active">⚡ Энергия</button>
+    <button data-tab="miner">🧱 Майнинг</button>
+    <button data-tab="market">🏪 Рынок</button>
+    <button data-tab="top">🏆 Топ</button>
+  </div>
+
+  <!-- Энергия -->
+  <section id="energy" class="tab active">
+    <img src="/assets/stations/station_basic.png" class="station" alt="Station"/>
+    <div class="stat"><span id="energy_val">EE: 0</span> · <span id="power_val">Сила клика: 1</span></div>
+    <div class="controls">
+      <img src="/assets/buttons/btn_energize.png" alt="Добыть" class="action-btn btn-blue" id="energize">
+      <img src="/assets/buttons/btn_upgrade.png" alt="Апгрейд" class="action-btn btn-violet" id="buy_power">
+    </div>
+  </section>
+
+  <!-- Майнинг -->
+  <section id="miner" class="tab">
+    <img src="/assets/miners/miner_mid.png" class="miner" alt="Miner"/>
+    <div class="stat"><span id="coins_val">Коины: 0</span></div>
+    <input id="use_energy" type="number" min="10" step="10" placeholder="EE для переработки"/>
+    <img src="/assets/buttons/btn_mine.png" alt="Майнить" class="action-btn btn-blue" id="mine_tick">
+  </section>
+
+  <!-- Рынок -->
+  <section id="market" class="tab">
+    <img src="/assets/stations/station_solar.png" class="station" alt="Market"/>
+    <div class="market-form">
+      <input id="sell_amount" type="number" placeholder="EE"/>
+      <input id="sell_price" type="number" step="0.0001" placeholder="Цена в TON за 1 EE"/>
+      <img src="/assets/buttons/btn_market.png" alt="Продать энергию" class="action-btn btn-green" id="sell_btn">
+    </div>
+  </section>
+
+  <!-- Топ -->
+  <section id="top" class="tab">
+    <ol id="top_list"></ol>
+  </section>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>

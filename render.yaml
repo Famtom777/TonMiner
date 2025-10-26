@@ -1,0 +1,24 @@
+services:
+  # === WEBAPP (Flask + Gunicorn) ===
+  - type: web
+    name: tonminer-web
+    env: python
+    rootDir: webapp
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PORT
+        value: 10000
+
+  # === TELEGRAM BOT ===
+  - type: worker
+    name: tonminer-bot
+    env: python
+    rootDir: bot
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: TOKEN
+        sync: false      # (введёшь вручную в Render → Environment)
+      - key: BASE_URL
+        value: https://tonminer-web.onrender.com

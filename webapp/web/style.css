@@ -1,0 +1,65 @@
+body {
+  background:#0f1115;
+  color:#cfefff;
+  font-family:'Orbitron',sans-serif;
+  text-align:center;
+  margin:0;
+  padding:0;
+}
+
+h1 { color:#00e0ff; text-shadow:0 0 10px #00ffff; }
+
+.tabs { display:flex; justify-content:center; gap:10px; margin:15px 0; }
+.tabs button {
+  background:transparent;
+  color:#00e0ff;
+  border:1px solid #00e0ff;
+  padding:6px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.tabs button.active,
+.tabs button:hover { background:#00e0ff22; }
+
+.tab { display:none; padding:10px; }
+.tab.active { display:block; }
+
+.station, .miner {
+  width:100%;
+  max-width:1024px;
+  margin:0 auto 10px;
+}
+
+.controls, .market-form { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+
+.action-btn {
+  width:180px; height:180px; cursor:pointer;
+  border-radius:50%;
+  animation:pulse-glow 2.5s infinite ease-in-out;
+  transition:transform .2s;
+}
+.action-btn:active { transform:scale(0.95); animation:none; }
+
+@keyframes pulse-glow {
+  0%,100% { filter:drop-shadow(0 0 5px rgba(0,255,255,.3)); }
+  50% { filter:drop-shadow(0 0 20px rgba(0,255,255,.7)); transform:scale(1.05); }
+}
+
+/* Цвета свечения */
+.btn-blue   { filter:drop-shadow(0 0 10px rgba(0,255,255,.6)); }
+.btn-violet { filter:drop-shadow(0 0 10px rgba(200,0,255,.6)); }
+.btn-green  { filter:drop-shadow(0 0 10px rgba(0,255,128,.6)); }
+
+input {
+  background:#1b1f28;
+  border:1px solid #00e0ff33;
+  color:#cfefff;
+  border-radius:8px;
+  padding:8px;
+  margin:5px;
+  width:160px;
+}
+
+ol { list-style:none; padding:0; }
+ol li { margin:4px 0; }
