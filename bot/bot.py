@@ -59,4 +59,3 @@ if __name__ == "__main__":
     port = int(os.getenv("PORT", "10000"))
     print(f"🌐 Flask сервер запущен на порту {port}")
     flask_app.run(host="0.0.0.0", port=port)
-
