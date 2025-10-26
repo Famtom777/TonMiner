@@ -36,9 +36,12 @@ def webhook():
 
 
 @app.route("/set_webhook")
-async def set_webhook():
-    await application.bot.set_webhook(WEBHOOK_URL)
+def set_webhook():
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(application.bot.set_webhook(WEBHOOK_URL))
     return f"Webhook установлен на {WEBHOOK_URL}", 200
+
 
 
 @app.route("/")
