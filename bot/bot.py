@@ -1,33 +1,37 @@
-import os, base64, hmac, hashlib, json
-from urllib.parse import urlencode
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from dotenv import load_dotenv
+from flask import Flask, request
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, CommandHandler
+import os
 
-load_dotenv()
 TOKEN = os.getenv("TOKEN")
-BASE_URL = os.getenv("BASE_URL", "https://YOUR-WEBAPP.onrender.com")
+BASE_URL = os.getenv("BASE_URL")
+WEBHOOK_URL = f"{BASE_URL}/webhook"
 
-if not TOKEN:
-    raise RuntimeError("TOKEN required")
+app = Flask(__name__)
 
-# (Опция) Если пока не внедрим initData-подпись, можно добавить ref-код к ссылке.
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    u = update.effective_user
-    qs = {"ref": u.id}  # чтобы новые могли подтянуть тебя как рефера
-    url = f"{BASE_URL}/?{urlencode(qs)}"
-    kb = [[InlineKeyboardButton("🎮 Играть", web_app=WebAppInfo(url=url))]]
+telegram_app = Application.builder().token(TOKEN).build()
+
+async def start(update: Update, context):
+    kb = [[InlineKeyboardButton("🎮 Играть в TON Miner", web_app={"url": f"{BASE_URL}/?ref={update.effective_user.id}"})]]
     await update.message.reply_text("Запускай игру 👇", reply_markup=InlineKeyboardMarkup(kb))
 
-async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Команды: /start, /help")
+telegram_app.add_handler(CommandHandler("start", start))
 
-def main():
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_cmd))
-    print("Bot running…")
-    app.run_polling()
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    update = Update.de_json(request.get_json(force=True), telegram_app.bot)
+    telegram_app.update_queue.put_nowait(update)
+    return "ok"
+
+@app.route("/set_webhook")
+async def set_webhook():
+    await telegram_app.bot.set_webhook(WEBHOOK_URL)
+    return f"Webhook set to {WEBHOOK_URL}"
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.create_task(telegram_app.initialize())
+    loop.create_task(telegram_app.start())
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", "10000")))
+
